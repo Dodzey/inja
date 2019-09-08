@@ -173,13 +173,13 @@ TEST_CASE("functions") {
 	SECTION("length") {
 		CHECK( env.render("{{ length(names) }}", data) == "4" ); // Length of array
 		CHECK( env.render("{{ length(name) }}", data) == "5" ); // Length of string
-		// CHECK_THROWS_WITH( env.render("{{ length(5) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is number" );
+		// CHECK_THROWS_WITH( env.render("{{ length(5) }}", data), "[json.exception.type_error.302] type must be array, but is number" );
 	}
 
 	SECTION("sort") {
 		CHECK( env.render("{{ sort([3, 2, 1]) }}", data) == "[1,2,3]" );
 		CHECK( env.render("{{ sort([\"bob\", \"charlie\", \"alice\"]) }}", data) == "[\"alice\",\"bob\",\"charlie\"]" );
-		// CHECK_THROWS_WITH( env.render("{{ sort(5) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is number" );
+		CHECK_THROWS_WITH( env.render("{{ sort(5) }}", data), "[json.exception.type_error.302] type must be array, but is number" );
 	}
 
 	SECTION("at") {
@@ -189,61 +189,61 @@ TEST_CASE("functions") {
 
 	SECTION("first") {
 		CHECK( env.render("{{ first(names) }}", data) == "Jeff" );
-		// CHECK_THROWS_WITH( env.render("{{ first(5) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is number" );
+		// CHECK_THROWS_WITH( env.render("{{ first(5) }}", data), "[json.exception.type_error.302] type must be array, but is number" );
 	}
 
 	SECTION("last") {
 		CHECK( env.render("{{ last(names) }}", data) == "Tom" );
-		// CHECK_THROWS_WITH( env.render("{{ last(5) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is number" );
+		// CHECK_THROWS_WITH( env.render("{{ last(5) }}", data), "[json.exception.type_error.302] type must be array, but is number" );
 	}
 
 	SECTION("round") {
 		CHECK( env.render("{{ round(4, 0) }}", data) == "4.0" );
 		CHECK( env.render("{{ round(temperature, 2) }}", data) == "25.68" );
-		// CHECK_THROWS_WITH( env.render("{{ round(name, 2) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be number, but is string" );
+		CHECK_THROWS_WITH( env.render("{{ round(name, 2) }}", data), "[json.exception.type_error.302] type must be number, but is string" );
 	}
 
 	SECTION("divisibleBy") {
 		CHECK( env.render("{{ divisibleBy(50, 5) }}", data) == "true" );
 		CHECK( env.render("{{ divisibleBy(12, 3) }}", data) == "true" );
 		CHECK( env.render("{{ divisibleBy(11, 3) }}", data) == "false" );
-		// CHECK_THROWS_WITH( env.render("{{ divisibleBy(name, 2) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be number, but is string" );
+		CHECK_THROWS_WITH( env.render("{{ divisibleBy(name, 2) }}", data), "[json.exception.type_error.302] type must be number, but is string" );
 	}
 
 	SECTION("odd") {
 		CHECK( env.render("{{ odd(11) }}", data) == "true" );
 		CHECK( env.render("{{ odd(12) }}", data) == "false" );
-		// CHECK_THROWS_WITH( env.render("{{ odd(name) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be number, but is string" );
+		CHECK_THROWS_WITH( env.render("{{ odd(name) }}", data), "[json.exception.type_error.302] type must be number, but is string" );
 	}
 
 	SECTION("even") {
 		CHECK( env.render("{{ even(11) }}", data) == "false" );
 		CHECK( env.render("{{ even(12) }}", data) == "true" );
-		// CHECK_THROWS_WITH( env.render("{{ even(name) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be number, but is string" );
+		// CHECK_THROWS_WITH( env.render("{{ even(name) }}", data), "[json.exception.type_error.302] type must be number, but is string" );
 	}
 
 	SECTION("max") {
 		CHECK( env.render("{{ max([1, 2, 3]) }}", data) == "3" );
 		CHECK( env.render("{{ max([-5.2, 100.2, 2.4]) }}", data) == "100.2" );
-		// CHECK_THROWS_WITH( env.render("{{ max(name) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is string" );
+		// CHECK_THROWS_WITH( env.render("{{ max(name) }}", data), "[json.exception.type_error.302] type must be array, but is string" );
 	}
 
 	SECTION("min") {
 		CHECK( env.render("{{ min([1, 2, 3]) }}", data) == "1" );
 		CHECK( env.render("{{ min([-5.2, 100.2, 2.4]) }}", data) == "-5.2" );
-		// CHECK_THROWS_WITH( env.render("{{ min(name) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is string" );
+		// CHECK_THROWS_WITH( env.render("{{ min(name) }}", data), "[json.exception.type_error.302] type must be array, but is string" );
 	}
 
 	SECTION("float") {
 		CHECK( env.render("{{ float(\"2.2\") == 2.2 }}", data) == "true" );
 		CHECK( env.render("{{ float(\"-1.25\") == -1.25 }}", data) == "true" );
-		// CHECK_THROWS_WITH( env.render("{{ max(name) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is string" );
+		// CHECK_THROWS_WITH( env.render("{{ max(name) }}", data), "[json.exception.type_error.302] type must be array, but is string" );
 	}
 
 	SECTION("int") {
 		CHECK( env.render("{{ int(\"2\") == 2 }}", data) == "true" );
 		CHECK( env.render("{{ int(\"-1.25\") == -1 }}", data) == "true" );
-		// CHECK_THROWS_WITH( env.render("{{ max(name) }}", data), "[inja.exception.json_error] [json.exception.type_error.302] type must be array, but is string" );
+		// CHECK_THROWS_WITH( env.render("{{ max(name) }}", data), "[json.exception.type_error.302] type must be array, but is string" );
 	}
 
 	SECTION("default") {
